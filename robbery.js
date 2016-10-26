@@ -100,17 +100,26 @@ function intersect(set, el) {
 exports.getAppropriateMoment = function (schedule, duration, workingHours) {
     bankTimezone = getTimezone(workingHours.from);
 
-    var appropriateIntervals = ['ПН', 'ВТ', 'СР'].map(function (day) {
-        return convertIntervalToBankTimezone({
-            from: day + ' ' + workingHours.from,
-            to: day + ' ' + workingHours.to
+    var appropriateIntervals = ['ПН', 'ВТ', 'СР']
+        .map(function (day) {
+            return convertIntervalToBankTimezone({
+                from: day + ' ' + workingHours.from,
+                to: day + ' ' + workingHours.to
+            });
+        })
+        .filter(function (interval) {
+            return interval.from !== interval.to;
         });
-    });
 
-    schedule = (schedule.Danny || []).concat(schedule.Rusty || [], schedule.Linus || []);
+    schedule = (schedule.Danny || []).concat(schedule.Rusty || [], schedule.Linus || [])
+        .map(function (interval) {
+            return convertIntervalToBankTimezone(interval);
+        })
+        .filter(function (interval) {
+            return interval.from !== interval.to;
+        });
 
     schedule.forEach(function (interval) {
-        interval = convertIntervalToBankTimezone(interval);
         intersect(appropriateIntervals, interval);
     });
 
