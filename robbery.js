@@ -79,6 +79,7 @@ function intersect(set, el) {
                 from: el.to,
                 to: set[i].to
             });
+            i--;
         } else if (el.from <= set[i].from && el.to >= set[i].to) { // bigger
             set.splice(i, 1);
         } else if (el.from < set[i].to && el.to > set[i].to) {
