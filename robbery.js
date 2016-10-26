@@ -48,14 +48,6 @@ function getUnifiedTime(dateString) {
     return unifiedTime;
 }
 
-// function intervalToString(interval) {
-//     var from = getDateComponents(interval.from);
-//     var to = getDateComponents(interval.to);
-
-//     return 'from: ' + from.dayOfWeek + ' ' + from.hours + ':' + from.minutes +
-//     ' to: ' + to.dayOfWeek + ' ' + to.hours + ':' + to.minutes;
-// }
-
 function convertIntervalToBankTimezone(interval) {
     return {
         from: getUnifiedTime(interval.from),
@@ -77,7 +69,6 @@ function getDateComponents(minutesSince) {
     };
 }
 
-// check me pls
 function intersect(set, el) {
     for (var i = 0; i < set.length; i++) {
         if (el.from > set[i].from && el.to < set[i].to) { // inside
@@ -116,7 +107,7 @@ exports.getAppropriateMoment = function (schedule, duration, workingHours) {
         });
     });
 
-    schedule = schedule.Danny.concat(schedule.Rusty, schedule.Linus);
+    schedule = (schedule.Danny || []).concat(schedule.Rusty || [], schedule.Linus || []);
 
     schedule.forEach(function (interval) {
         interval = convertIntervalToBankTimezone(interval);
@@ -130,10 +121,6 @@ exports.getAppropriateMoment = function (schedule, duration, workingHours) {
         .sort(function (a, b) {
             return a.from > b.from;
         });
-
-    // appropriateIntervals.forEach(function (value) {
-    //     console.info(intervalToString(value));
-    // });
 
     return {
 
